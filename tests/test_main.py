@@ -1,10 +1,11 @@
 """
-C:\Users\Administrator\home_library\tests\test_main.py
+# 방법 2: / 사용
+tests/test_main.py
 
 GitHub Actions 실습용 최초 테스트 v5
 - DB, 외부 API(국립중앙도서관 api key) 없이도 통과하는 순수 로직만 검증한다.
 - 검증 대상
-    services\recognition.py의 normalize_isbn() 함수 체크
+    services/recognition.py의 normalize_isbn() 함수 체크
     유효한 ISBN인지 체크섬으로 확인하는 함수
 - 이 파일이 GitHub Actions(CI)에서 push할 때마다 자동으로 실행된다.
 """
