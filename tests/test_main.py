@@ -24,4 +24,4 @@ def test_ISBN10_유효한_경우_그대로_반환한다():
     assert normalize_isbn('0-306-40615-2') == '0306406152'
 
 def test_ISBN_체크자리가_X인_경우도_처리한다():
-    assert normalize_isbn('0-8044-2957-x') == '080442957x'  # 대/소문자 모두 가능
+    assert normalize_isbn('0-8044-2957-x') == '080442957X'  # 대/소문자 모두 가능
