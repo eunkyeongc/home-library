@@ -32,28 +32,6 @@ def normalize_isbn(value: str) -> str | None:
     return None
 
 
-def extract_isbn(image_path) -> str | None:
-    try:
-        import pytesseract
-        from PIL import Image, ImageEnhance, ImageOps
-    except ImportError:
-        return None
-
-    with Image.open(image_path) as source:
-        image = ImageOps.grayscale(source)
-        image = ImageEnhance.Contrast(image).enhance(2)
-        try:
-            text = pytesseract.image_to_string(image, config='--psm 11')
-        except pytesseract.TesseractNotFoundError:
-            return None
-
-    for candidate in re.findall(r'(?:97[89][\s-]?)?[0-9][0-9Xx\s-]{8,16}', text):
-        isbn = normalize_isbn(candidate)
-        if isbn:
-            return isbn
-
-    return None
-
 # NLK_SEARCH_KEY = os.environ.get('NLK_SEARCH_KEY', '')
 NLK_SEARCH_KEY = 'dfecaba0323398eaf303dda3899c90d6bd5fc1d014e73152545fbd99286c9f3e'
 NLK_SEARCH_URL = 'https://www.nl.go.kr/NL/search/openApi/search.do'
