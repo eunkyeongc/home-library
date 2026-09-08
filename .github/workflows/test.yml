@@ -7,6 +7,30 @@ on:
 jobs:           # 아래에 실행할 작업 단위(job) 들을 나열한다. - 서로 독립된 가상 컴퓨터(Runner)에서 실행, 병렬처리
   test:         # job-name(우리가 직접 지은 식별자), Actions 탭 안에 들어가면 이 이름으로 표시된다.
     runs-on: ubuntu-latest  # 깃허브가 무료로 빌려주는 깨끗한 가상 컴퓨터(Runner) -> job이 끝나면 폐기.
+    services: 
+      # 이 job이 실행되는 동안 같이 떠 있는 보조 컨테이너를 정의. 
+      # 로컬의 PostgreSQL과는 완전히 별개의 이 워크플로우 실행 한번만을 위한 임시 DB
+      # job이 끝나면 이 컨터이너도 통째로 폐기된다.(매번 완전히 빈 테이블에서 시작)
+      postgres:
+        image: postgres:17
+          # 로컬과 같은 버전(docker-compose.yml)을 이용해서 버전 차이로 인한 문제를 원천적으로 차단
+        
+        env:
+          POSTGRES_DB: home_library_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          # 로컬/운영 계정 정보와 전혀 무관한 ci 전용값, 이 값이 노출돼도 문제가 없다.! 테스트와 함께 사라짐.
+        
+        ports:
+          - 5432:5432
+          # 깃허브액션(Runner)포트:컨테이너포트
+        
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        # pg_isready --> PostgreSQL의 공식 준비 상태 확인 명령어.(10초마다 확인, 5초까지 대가, 최대 5번 재시도)
 
     steps:      # 이 job안에서 위에서 아래 순서로 실행할 세부 명령들의 목록, 리스트(-로 시작)이므로 순서가 중요하다.
       - name: 1.저장소 코드 가져오기  # 이 스텝을 사람이 알아보기 쉽게 부르는 이름(로그에 이 이름으로 표시)
@@ -25,7 +49,11 @@ jobs:           # 아래에 실행할 작업 단위(job) 들을 나열한다. - 
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 4.테스트 실행하기
+      - name: 4.테스트 실행하기(DB 없는 테스트 + DB 연동 테스트 모두 포함)
+        env:
+          DATABASE_URL: postgresql+psycopg2://postgres:postgres@localhost:5432+/home_library_test}
+          
+
         run: python -m pytest -v  # -v(verbose:상세)옵션 --> 통과/실패했을지 로그에 찍어준다.
 
   build:  # 이 job의 이름, test job과 완전히 별개의 job 
