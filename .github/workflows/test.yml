@@ -51,7 +51,7 @@ jobs:           # 아래에 실행할 작업 단위(job) 들을 나열한다. - 
 
       - name: 4.테스트 실행하기(DB 없는 테스트 + DB 연동 테스트 모두 포함)
         env:
-          DATABASE_URL: postgresql+psycopg2://postgres:postgres@localhost:5432/home_library_test}
+          DATABASE_URL: postgresql+psycopg2://postgres:postgres@localhost:5432/home_library_test
           
 
         run: python -m pytest -v  # -v(verbose:상세)옵션 --> 통과/실패했을지 로그에 찍어준다.
