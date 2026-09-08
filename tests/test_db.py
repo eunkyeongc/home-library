@@ -19,15 +19,15 @@ def test_책을_저장하고_다시_조회할_수_있다():
     db = SessionLocal()
 
     try:
-        book = Book(title='CI 테스트용 책', isbn='9999999999999', author='테스트 저자')
+        book = Book(title="CI 테스트용 책", isbn="9999999999999", author="테스트 저자")
         db.add(book)
         db.commit()
         # DB가 자동으로 채운 id, created_at 등을 다시 읽어온다.
-        db.refresh()
+        db.refresh(book)
 
         saved =db.get(Book, book.id)
         assert saved is not None
-        assert saved.title == 'CI 테스트용 책'
+        assert saved.title == "CI 테스트용 책"
 
         # models.py에서 default='confirmed'로 정의된 값이 실제로 DB에도 반영되었는지 확인
         assert saved.recognition_status == 'confirmed'
