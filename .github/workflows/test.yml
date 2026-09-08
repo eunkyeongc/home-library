@@ -43,11 +43,11 @@ jobs:           # 아래에 실행할 작업 단위(job) 들을 나열한다. - 
         uses: actions/checkout@v5
 
       - name: 2. Docker Hub 로그인
-        uses: docker/login-action@v4
+        uses: docker/login-action@v3
         # docker/lonin-action --> 이 Runner가 Docker Hub에 로그인해서 이미지를 push할 권한을 얻게 해준다.
         
         with:
-          username: S{{ secrets.DOCKER_USERNAME }}
+          username: ${{ secrets.DOCKER_USERNAME }}
           # S{{  }} --> 깃허브 액션에서 값을 여기에 끼워넣어라는 표현식 문법
           # secrets.DOCKER_USERNAME --> 저장소 settings에 등록해 둔 비밀값을 가져온다.
 
