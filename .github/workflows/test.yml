@@ -39,11 +39,11 @@ jobs:           # 아래에 실행할 작업 단위(job) 들을 나열한다. - 
     #                   --> 실제로 main에 merge(직접 push)됐을 때만 이미지를 만든다. (PR 또는 다른 브랜치 X)
 
     steps:
-      -name: 1. 코드 가져오기
-        uses: actions/checkout@v4
+      - name: 1. 코드 가져오기
+        uses: actions/checkout@v5
 
-      -name: 2. Docker Hub 로그인
-        uses: docker/lonin-action@v3
+      - name: 2. Docker Hub 로그인
+        uses: docker/lonin-action@v4
         # docker/lonin-action --> 이 Runner가 Docker Hub에 로그인해서 이미지를 push할 권한을 얻게 해준다.
         
         with:
@@ -53,7 +53,7 @@ jobs:           # 아래에 실행할 작업 단위(job) 들을 나열한다. - 
 
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      -name: 3. 이미지 빌드 및 Docker Hub 업로드
+      - name: 3. 이미지 빌드 및 Docker Hub 업로드
         uses: docker/build-push-action@v6
         # 'docker build' +'docker push' 두 명령어를 한번에 실행해주는 Docker 공식 액션
 
